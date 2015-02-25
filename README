@@ -1,0 +1,17 @@
+** This project is alpha **
+
+This project provides metaclass propagation along with class inheritance structures.
+This project use closer-mop and modify c2mop:ensure-class-usgin-class by around-method so
+it can conflict with some libraries modifing same method.
+
+Usage:
+  1. download from git.
+  2. move the directory to quicklisp local-project directory.
+  3. (ql:quickload :meta-propagate)
+  4. (metap:register-m1-m2-pair your-class your-metaclass)
+
+  See singleton-mixin (https://github.com/
+
+License:
+  This software is released under the MIT License, see LICENSE.txt.
+
