@@ -1,11 +1,13 @@
 # meta-propagation
-** This project is alpha **
+
+**This project is alpha**
 
 This provides metaclass propagation along with class inheritance structures.
 This project use closer-mop and modify c2mop:ensure-class-usgin-class by around method so it can conflict with some libraries modifing same method.
 
-## Motivation:
-You got some idea which use mop like:
+## Motivation
+
+You got some idea which use mop like
 
 ```
 (defclass some-meta-class (standard-class) ())
@@ -13,7 +15,7 @@ You got some idea which use mop like:
 (defmethod something2 ((class some-meta-class) ...) ...)
 ```
 
-and use this for some classes like:
+and use this for some classes like
 
 ```
 (defclass some-class1 () () (:metaclass 'some-meta-class))
@@ -24,7 +26,7 @@ and use this for some classes like:
 ```
 
 This is boring.
-Using meta-propagate, it can simply be written like:
+Using meta-propagate, it can simply be written like
 
 ```
 (defclass some-mixin () ())
@@ -36,10 +38,12 @@ Using meta-propagate, it can simply be written like:
 (defclass some-class4 (some-class1) ())
 ```
 
-## Environment:
+## Environment
+
 - sbcl 1.2.1 or higher
 
-## Usage:
+## Usage
+
 1. download from git.
 1. move the directory to quicklisp local-project directory.
 1. (ql:quickload :meta-propagate)
@@ -47,5 +51,6 @@ Using meta-propagate, it can simply be written like:
 
 See cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using this.
 
-## License:
-  This software is released under the MIT License, see LICENSE file.
+## License
+
+This software is released under the MIT License, see LICENSE file.
