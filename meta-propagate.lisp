@@ -18,7 +18,7 @@
 (defparameter *metap-m1-m2-pairs* nil)
 
 (defun register-m1-m2-pair (m1class m2class)
-  (push (cons m1class m2class) *metap-m1-m2-pairs*))
+  (pushnew (cons m1class m2class) *metap-m1-m2-pairs* :test 'equal))
 
 (defun clear-m1-m2-pairs ()
   (setf *metap-m1-m2-pairs* nil))
