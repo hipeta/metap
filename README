@@ -10,7 +10,7 @@ Usage:
   3. (ql:quickload :meta-propagate)
   4. (metap:register-m1-m2-pair your-class your-metaclass)
 
-  See singleton-mixin (https://github.com/
+  See singleton-mixin (https://github.com/hipeta/meta-propagate)
 
 License:
   This software is released under the MIT License, see LICENSE.txt.
