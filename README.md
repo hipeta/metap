@@ -1,4 +1,4 @@
-# meta-propagation
+# meta-propagate
 
 **This project is alpha**
 
