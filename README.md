@@ -47,7 +47,7 @@ Using metap, it can simply be written like
 1. Download metap from git.
 1. Move the directory to quicklisp local-project directory.
 1. (ql:quickload :metap)
-1. (metap:register-m1-m2-pair your-class your-metaclass) and then subclasses of your-class are instantiated from your-metaclass by defclass.
+1. (metap:register-m1-m2-pair your-class your-metaclass) and then subclasses of your-class are instantiated from your-metaclass by defclass. (so subclasses of your-class must be defined after metap:register-m1-m2-pair)
 
 See cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using metap.
 
