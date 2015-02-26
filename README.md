@@ -2,7 +2,7 @@
 
 **This project is alpha**
 
-Metap provides metaclass propagation along with class inheritance structures.
+Metap provides metaclass propagation along class inheritance structures.
 Metap use closer-mop and modify c2mop:ensure-class-usgin-class by around method so it can conflict with some libraries modifing same method.
 
 ## Motivation
