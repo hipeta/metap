@@ -28,6 +28,7 @@
                                                      direct-slots
                                                      direct-superclasses
                                                      metaclass &allow-other-keys)
+  (declare (ignorable args))
   (flet ((apply-m2class (m1class m2class)
            (let ((allowed-metaclasses `(standard-class ',m2class)))
              (if (and metaclass (member metaclass allowed-metaclasses))
