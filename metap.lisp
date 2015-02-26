@@ -1,4 +1,4 @@
-;;;; meta-propagate.lisp
+;;;; metap.lisp
 ;;;;  
 ;;;; Copyright 2015 hipeta (rhipeta@gmail.com)
 ;;;;
@@ -6,9 +6,8 @@
 ;;;; http://opensource.org/licenses/mit-license.php
 
 (in-package :cl-user)
-(defpackage meta-propagate
+(defpackage metap
   (:use :cl)
-  (:nicknames :metap)
   (:import-from :alexandria :compose)
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair

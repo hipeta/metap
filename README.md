@@ -1,9 +1,9 @@
-# meta-propagate
+# Metap
 
 **This project is alpha**
 
-This provides metaclass propagation along with class inheritance structures.
-This project use closer-mop and modify c2mop:ensure-class-usgin-class by around method so it can conflict with some libraries modifing same method.
+Metap provides metaclass propagation along with class inheritance structures.
+Metap use closer-mop and modify c2mop:ensure-class-usgin-class by around method so it can conflict with some libraries modifing same method.
 
 ## Motivation
 
@@ -26,7 +26,7 @@ and use this for some classes like
 ```
 
 This is boring.
-Using meta-propagate, it can simply be written like
+Using metap, it can simply be written like
 
 ```
 (defclass some-mixin () ())
@@ -44,13 +44,13 @@ Using meta-propagate, it can simply be written like
 
 ## Usage
 
-1. download from git.
-1. move the directory to quicklisp local-project directory.
+1. Download metap from git.
+1. Move the directory to quicklisp local-project directory.
 1. (ql:quickload :meta-propagate)
 1. (metap:register-m1-m2-pair your-class your-metaclass) and your-class (and subclasses) become the instance of your-metaclass
 
-See cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using this.
+See cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using metap.
 
 ## License
 
-This software is released under the MIT License, see LICENSE file.
+Metap is released under the MIT License, see LICENSE file.
