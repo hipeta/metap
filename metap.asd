@@ -6,11 +6,12 @@
 ;;;; http://opensource.org/licenses/mit-license.php
 
 (asdf:defsystem #:metap
-  :serial t
-  :description "metap provides metaclass propagation along with class inheritance structures."
   :author "hipeta"
   :license "MIT"
+  :description "Metap provides metaclass propagation along with class inheritance structures."
+  :serial t
   :depends-on (:alexandria
-               :closer-mop)
+               :closer-mop
+               :cl-thread-macro)
   :components ((:file "metap")))
 
