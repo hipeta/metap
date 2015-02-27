@@ -12,6 +12,6 @@
   :serial t
   :depends-on (:alexandria
                :closer-mop
-               :cl-thread-macro)
+               :arrow-macros)
   :components ((:file "metap")))
 
