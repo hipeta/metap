@@ -32,22 +32,27 @@
 (defclass test1-mixin () ())
 (defmethod c2mop:validate-superclass ((c meta1) (s standard-class)) t)
 (defmethod make-instance ((class meta1) &key)
-  (print "meta1")
+  (format t "meta1")
   (call-next-method))
 
 (defclass meta2 (meta1) ())
 (defclass test2-mixin () ())
 (defmethod c2mop:validate-superclass ((c meta2) (s meta1)) t)
 (defmethod make-instance ((class meta2) &key)
-  (print "meta2")
+  (format t "meta2")
   (call-next-method))
 
-(register-m1-m2-pair 'test1-mixin 'meta2)
-(register-m1-m2-pair 'test2-mixin 'meta1)
+(register-m1-m2-pair 'test1-mixin 'meta1)
+(register-m1-m2-pair 'test2-mixin 'meta2)
 (defclass test1 (test1-mixin) ())
 (defclass test2 (test2-mixin) ())
 
 (test meta-propagation-test
   (is (eq (class-of (find-class 'test2)) (find-class 'meta2)))
-  (is (eq (class-of (find-class 'test1)) (find-class 'meta1))))
+  (is (eq (class-of (find-class 'test1)) (find-class 'meta1)))
+  (is (equal "meta1"
+             (with-output-to-string (*standard-output*) (make-instance 'test1))))
+  (is (equal "meta2meta1"
+             (with-output-to-string (*standard-output*) (make-instance 'test2)))))
+      
 
