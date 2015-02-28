@@ -10,8 +10,7 @@
   (:use :cl :fiveam :metap))
 (in-package :metap-test)
 
-(def-suite all)
-(in-suite all)
+(in-suite* all)
 
 (defclass a () ())
 (defclass b (a) ())
@@ -28,3 +27,27 @@
 (test compute-precedense-list-test
   (is (equal (metap::compute-precedense-list (mapcar #'find-class '(h i j)))
              (cdr (c2mop:compute-class-precedence-list (find-class 'k))))))
+
+(defclass meta1 (standard-class) ())
+(defclass test1-mixin () ())
+(defmethod c2mop:validate-superclass ((c meta1) (s standard-class)) t)
+(defmethod make-instance ((class meta1) &key)
+  (print "meta1")
+  (call-next-method))
+
+(defclass meta2 (meta1) ())
+(defclass test2-mixin () ())
+(defmethod c2mop:validate-superclass ((c meta2) (s meta1)) t)
+(defmethod make-instance ((class meta2) &key)
+  (print "meta2")
+  (call-next-method))
+
+(register-m1-m2-pair 'test1-mixin 'meta2)
+(register-m1-m2-pair 'test2-mixin 'meta1)
+(defclass test1 (test1-mixin) ())
+(defclass test2 (test2-mixin) ())
+
+(test meta-propagation-test
+  (is (eq (class-of (find-class 'test2)) (find-class 'meta2)))
+  (is (eq (class-of (find-class 'test1)) (find-class 'meta1))))
+
