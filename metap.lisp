@@ -80,8 +80,8 @@
                  (display-node-data node)
                  (if (null subs) node (mapc #'rec-downward subs)))))
       (-> node
-        (-<> (progn (format t "Upwards:~%") <>)) rec-upward
-        (-<> (progn (format t "~%Downwards:~%") <>)) rec-downward))))
+        (-<>> (progn (format t "Upwards:~%"))) rec-upward
+        (-<>> (progn (format t "~%Downwards:~%"))) rec-downward))))
  
 (defun compute-precedense-list (direct-superclasses)
   (let ((root (construct-lattice direct-superclasses))
@@ -118,6 +118,6 @@
       (loop for c in precedense-list do
            (some-<> (car (member (class-name c) *metap-m1-m2-pairs* :key #'car))
              (apply-m2class (car <>) (cdr <>))
-             (return <>))
+             (return))
          finally (return (call-next-method))))))
 
