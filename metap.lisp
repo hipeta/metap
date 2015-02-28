@@ -17,7 +17,11 @@
 (defparameter *metap-m1-m2-pairs* nil)
 
 (defun register-m1-m2-pair (m1class m2class)
-  (pushnew (cons m1class m2class) *metap-m1-m2-pairs* :test 'equal))
+  (-<> (cons (find-class m1class) (find-class m2class))
+    (progn (when (member <> *metap-m1-m2-pairs* :test 'equal)
+             (warn "~a and ~a pair is already registered." (car <>) (cdr <>)))
+           <>)
+    (push *metap-m1-m2-pairs*)))
 
 (defun clear-m1-m2-pairs ()
   (setf *metap-m1-m2-pairs* nil))
@@ -80,8 +84,8 @@
                  (display-node-data node)
                  (if (null subs) node (mapc #'rec-downward subs)))))
       (-> node
-        (-<> (progn (format t "Upwards:~%") <>)) rec-upward
-        (-<> (progn (format t "~%Downwards:~%") <>)) rec-downward))))
+        (-<>> (progn (format t "Upwards:~%"))) rec-upward
+        (-<>> (progn (format t "~%Downwards:~%"))) rec-downward))))
  
 (defun compute-precedense-list (direct-superclasses)
   (let ((root (construct-lattice direct-superclasses))
@@ -116,8 +120,7 @@
                         metaclass name m1class)))))
     (let ((precedense-list (compute-precedense-list (mapcar #'find-class direct-superclasses))))
       (loop for c in precedense-list do
-           (some-<> (car (member (class-name c) *metap-m1-m2-pairs* :key #'car))
+           (some-<> (car (member c *metap-m1-m2-pairs* :key #'car))
              (apply-m2class (car <>) (cdr <>))
-             (return <>))
+             (return))
          finally (return (call-next-method))))))
-
