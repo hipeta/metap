@@ -11,7 +11,8 @@
   (:import-from :alexandria :compose)
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair
-           :clear-m1-m2-pairs))
+           :clear-m1-m2-pairs
+           :validate-superclass*))
 (in-package :metap)
 
 (defparameter *metap-m1-m2-pairs* nil)
@@ -25,6 +26,13 @@
 
 (defun clear-m1-m2-pairs ()
   (setf *metap-m1-m2-pairs* nil))
+
+(defmacro validate-superclass* (&body validations)
+  `(progn
+     ,@(loop for validation in validations collect
+            (destructuring-bind (meta1 meta2 validate-p) validation
+              `(defmethod c2mop:validate-superclass
+                   ((,(intern "C") ,meta1) (,(intern "S") ,meta2)) ,validate-p)))))
 
 (defclass node ()
   ((class :initform nil :initarg :class)
