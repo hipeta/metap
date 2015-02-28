@@ -54,5 +54,10 @@
              (with-output-to-string (*standard-output*) (make-instance 'test1))))
   (is (equal "meta2meta1"
              (with-output-to-string (*standard-output*) (make-instance 'test2)))))
-      
 
+(test validate-superclass*
+  (is (equal `(progn (defmethod c2mop:validate-superclass ((c meta2) (s meta1)) t)
+                     (defmethod c2mop:validate-superclass ((c meta2) (s meta2)) t)
+                     (defmethod c2mop:validate-superclass ((c meta1) (s meta2)) nil))
+             (macroexpand
+              '(validate-superclass* (meta2 meta1 t) (meta2 meta2 t) (meta1 meta2 nil))))))
