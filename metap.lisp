@@ -61,18 +61,19 @@
                                                      direct-default-initargs
                                                      direct-slots
                                                      direct-superclasses
-                                                     metaclass &allow-other-keys)
+                                                     metaclass
+                                                   &allow-other-keys)
   (declare (ignorable args))
   (flet ((apply-m2class (m1class m2class)
            (let ((allowed-metaclasses `(standard-class ',m2class)))
-             (if (and metaclass (member metaclass allowed-metaclasses))
+             (if (and metaclass (not (member metaclass allowed-metaclasses)))
+                 (error "Can not specify ~a as metaclass because this class ~a is a subclass of ~a."
+                        metaclass name m1class)
                  (call-next-method class name
                                    :direct-default-initargs direct-default-initargs
                                    :direct-slots direct-slots
                                    :direct-superclasses direct-superclasses
-                                   :metaclass m2class)
-                 (error "can not specify ~a as metaclass because this class ~a is a subclass of ~a."
-                        metaclass name m1class)))))
+                                   :metaclass m2class)))))
     (let ((precedense-list (compute-precedense-list (mapcar #'find-class direct-superclasses))))
       (loop for c in precedense-list do
            (some-<> (car (member c *metap-m1-m2-pairs* :key #'car))
