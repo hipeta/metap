@@ -61,3 +61,7 @@
                      (defmethod c2mop:validate-superclass ((c meta1) (s meta2)) nil))
              (macroexpand
               '(validate-superclass* (meta2 meta1 t) (meta2 meta2 t) (meta1 meta2 nil))))))
+
+(test illegale-specifing-case-test
+  (signals simple-error
+    (defclass test2-2 (test2-mixin) () (:metaclass meta1))))
