@@ -42,7 +42,6 @@ Using metap, it can simply be written like
 
 ## Usage
 
-1. Download arrow-macros (https://github.com/hipeta/arrow-macros) and move the directory to quicklisp local-project directory.
 1. Download metap and move the directory to quicklisp local-project directory.
 1. (ql:quickload :metap)
 1. (metap:register-m1-m2-pair your-class your-metaclass) and then subclasses of your-class are instantiated from your-metaclass at defclass. (so subclasses of your-class must be defined after metap:register-m1-m2-pair)
