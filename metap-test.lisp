@@ -64,4 +64,6 @@
 
 (test illegale-specifing-case-test
   (signals simple-error
-    (defclass test2-2 (test2-mixin) () (:metaclass meta1))))
+    (defclass test2-2 (test2-mixin) () (:metaclass meta1)))
+  (signals simple-error
+    (defclass test2-3 (test2-mixin) () (:metaclass meta2))))
