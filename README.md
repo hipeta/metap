@@ -36,12 +36,12 @@ Using metap, it can simply be written like
 (defclass some-class4 (some-class1) ())
 ```
 
+Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using metap.
+
 ## Installation
 
 1. Download metap and move the directory to quicklisp local-project directory.
 1. (ql:quickload :metap)
-
-See cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using metap.
 
 ## License
 
