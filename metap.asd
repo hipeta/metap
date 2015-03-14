@@ -8,7 +8,7 @@
 (asdf:defsystem #:metap
   :author "hipeta"
   :license "MIT"
-  :description "Metap provides metaclass propagation along class inheritance structures."
+  :description "Metap provides metaclass propagation along class inheritance structure."
   :serial t
   :depends-on (:alexandria
                :closer-mop
