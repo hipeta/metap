@@ -1,11 +1,11 @@
 # Metap
 
 Metap provides metaclass propagation along class inheritance structures.
-Metap use closer-mop and modify c2mop:ensure-class-usgin-class by around method so it can conflict with some libraries modifing same method.
+Metap use closer-mop and modify c2mop:ensure-class-using-class by around method so it can conflict with some libraries modifing same method.
 
 ## Motivation
 
-You got some idea which use mop like
+You got some idea which use metaclass like
 
 ```
 (defclass some-meta-class (standard-class) ())
@@ -36,15 +36,11 @@ Using metap, it can simply be written like
 (defclass some-class4 (some-class1) ())
 ```
 
-## Environment
-
-- sbcl 1.2.1 or higher
-
 ## Usage
 
 1. Download metap and move the directory to quicklisp local-project directory.
 1. (ql:quickload :metap)
-1. (metap:register-m1-m2-pair your-class your-metaclass) and then subclasses of your-class are instantiated from your-metaclass at defclass. (so subclasses of your-class must be defined after metap:register-m1-m2-pair)
+1. (metap:register-m1-m2-pair your-class your-metaclass) and then subclasses of your-class are instantiated from your-metaclass at defclass (so subclasses of your-class must be defined after metap:register-m1-m2-pair).
 
 See cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using metap.
 
