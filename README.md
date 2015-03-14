@@ -1,7 +1,7 @@
 # Metap
 
 Metap provides metaclass propagation along class inheritance structure.
-Metap use closer-mop and modify *c2mop:ensure-class-using-class* :around* (class t) name &rest args* so it can conflict with some libraries modifing same method.
+Metap use closer-mop and modify *c2mop:ensure-class-using-class :around (class t) name &rest args* so it can conflict with some libraries modifing same method.
 
 ## Motivation
 
