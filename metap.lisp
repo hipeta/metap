@@ -11,7 +11,6 @@
   (:import-from :alexandria :compose)
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair
-           :clear-m1-m2-pairs
            :validate-superclass*))
 (in-package :metap)
 
@@ -23,9 +22,6 @@
              (warn "~a and ~a pair is already registered." (car <>) (cdr <>)))
            <>)
     (push *metap-m1-m2-pairs*)))
-
-(defun clear-m1-m2-pairs ()
-  (setf *metap-m1-m2-pairs* nil))
 
 (defmacro validate-superclass* (&body validations)
   `(progn
