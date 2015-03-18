@@ -40,7 +40,7 @@ Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which
 
 ## APIs
 
-### Symbols
+### Variables
 
 - \*metap-m1-m2-paris\*
  * All pairs which registered in metap.
