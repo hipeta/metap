@@ -65,6 +65,7 @@
 (defmethod c2mop:ensure-class-using-class :around ((class null) name &rest keys)
   (symbol-macrolet ((metaclass (getf keys :metaclass))
                     (direct-superclasses (getf keys :direct-superclasses)))
+    (ignore-errors (print name) (print keys) (print ""))
     (flet ((apply-m2class (m1class m2class)
              (when (and metaclass
                         (not (member metaclass `(standard-class ,(class-name m2class)))))
@@ -73,10 +74,11 @@
              (setf metaclass (class-name m2class)))
            (find-class% (symbol-or-class)
              (if (symbolp symbol-or-class)
-                 (find-class symbol-or-class)
+                 (ignore-errors (find-class symbol-or-class))
                  symbol-or-class)))
-      (let ((precedense-list
-             (compute-precedense-list (mapcar #'find-class% direct-superclasses))))
+      (let ((precedense-list (->> (mapcar #'find-class% direct-superclasses)
+                               (remove-if #'null)
+                               compute-precedense-list)))
         (loop for c in precedense-list do
              (let ((pair (car (member c *metap-m1-m2-pairs* :key #'car))))
                (when pair
