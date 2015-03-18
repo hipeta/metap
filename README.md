@@ -45,7 +45,7 @@ Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which
 
 ### Variables
 
-- \*metap-m1-m2-paris\*
+- \*metap-m1-m2-pairs\*
  * All pairs which registered in metap.
 
 ### Functions
