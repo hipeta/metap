@@ -1,7 +1,9 @@
 # Metap
 
 Metap provides metaclass propagation along class inheritance structure.
-Metap uses closer-mop and changes *c2mop:ensure-class-using-class (class null) name &rest args* so it could conflicts with other library modifing same method.
+Metap uses closer-mop and changes
+- *c2mop:ensure-class-using-class class name &rest args*
+so it could conflicts with other library modifing same method.
 
 ## Motivation
 
@@ -28,7 +30,7 @@ Using metap, it can simply be written like
 
 ```
 (defclass some-mixin () ())
-(metap:register-m1-m2-pair some-mixin some-meta-class)
+(metap:register-m1-m2-pair 'some-mixin 'some-meta-class)
 
 (defclass some-class1 (some-mixin) ())
 (defclass some-class2 (some-class1) ())
@@ -45,11 +47,12 @@ Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which
 - \*metap-m1-m2-paris\*
  * All pairs which registered in metap.
 
-### Macros
+### Functions
 
 - register-m1-m2-pair (m1class m2class)
  * Register m1class and m2class pair which you want enable metaclass propagation.
- * As a point to notice, the concrete metaclass of m1class becomes the subclass of m2class, whose name is like %M2CLASS-METAP. This class is created while interpreting this macro. This specification is needed for applying metaclass to m1class before processing other mop processes.
+
+### Macros
 
 - validate-superclass* (&body validations)
  * Syntax sugar for c2mop:validate-superclass.

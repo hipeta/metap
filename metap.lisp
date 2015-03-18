@@ -45,24 +45,14 @@
 
 (defparameter *metap-m1-m2-pairs* nil)
 
-(defun register-m1-m2-pair% (m1class m2child)
-  (-<> (cons (find-class m1class) (find-class m2child))
+(defun register-m1-m2-pair (m1class m2class)
+  (-<> (cons (find-class m1class) (find-class m2class))
     (progn (when (member <> *metap-m1-m2-pairs* :test 'equal)
              (warn "~a and ~a pair is already registered." (car <>) (cdr <>)))
            <>)
     (push *metap-m1-m2-pairs*)))
 
-(defmacro register-m1-m2-pair (m1class m2class)
-  (let ((m2child-symbol (intern (format nil "%~a-METAP" (symbol-name m2class)))))
-    `(progn
-       (defclass ,m2child-symbol (,m2class) ())
-       (defmethod c2mop:ensure-class-using-class :around ((class ,m2child-symbol) name
-                                                          &rest keys)
-           (setf (getf keys :metaclass) ',m2child-symbol)
-           (apply #'call-next-method class name keys))
-       (register-m1-m2-pair% ',m1class ',m2child-symbol))))
-
-(defmethod c2mop:ensure-class-using-class :around ((class null) name &rest keys)
+(defmethod c2mop:ensure-class-using-class :around (class name &rest keys)
   (symbol-macrolet ((metaclass (getf keys :metaclass))
                     (direct-superclasses (getf keys :direct-superclasses)))
     (flet ((apply-m2class (m1class m2class)
@@ -84,4 +74,3 @@
                  (apply-m2class (car pair) (cdr pair))
                  (return))))
         (apply #'call-next-method class name keys)))))
-

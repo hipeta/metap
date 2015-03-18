@@ -42,15 +42,15 @@
   (format t "meta2")
   (call-next-method))
 
-(register-m1-m2-pair test1-mixin meta1)
-(register-m1-m2-pair test2-mixin meta2)
+(register-m1-m2-pair 'test1-mixin 'meta1)
+(register-m1-m2-pair 'test2-mixin 'meta2)
 
 (defclass test1 (test1-mixin) ())
 (defclass test2 (test2-mixin) ())
 
 (test meta-propagation-test
-  (is (eq (class-of (find-class 'test2)) (find-class '%meta2-metap)))
-  (is (eq (class-of (find-class 'test1)) (find-class '%meta1-metap)))
+  (is (eq (class-of (find-class 'test2)) (find-class 'meta2)))
+  (is (eq (class-of (find-class 'test1)) (find-class 'meta1)))
   (is (equal "meta1"
              (with-output-to-string (*standard-output*) (make-instance 'test1))))
   (is (equal "meta2meta1"
@@ -66,5 +66,5 @@
 (test illegale-specifing-case-test
   (signals simple-error
     (defclass test2-2 (test2-mixin) () (:metaclass meta1)))
-  (signals simple-error
+  (finishes
     (defclass test2-3 (test2-mixin) () (:metaclass meta2))))
