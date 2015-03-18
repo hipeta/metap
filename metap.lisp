@@ -68,8 +68,10 @@
                                  :direct-default-initargs direct-default-initargs
                                  :direct-slots direct-slots
                                  :direct-superclasses direct-superclasses
-                                 :metaclass m2class))))
-    (let ((precedense-list (compute-precedense-list (mapcar #'find-class direct-superclasses))))
+                                 :metaclass m2class)))
+         (find-class% (symbol-or-class)
+           (if (symbolp symbol-or-class) (find-class symbol-or-class) symbol-or-class)))
+    (let ((precedense-list (compute-precedense-list (mapcar #'find-class% direct-superclasses))))
       (loop for c in precedense-list do
            (some-<> (car (member c *metap-m1-m2-pairs* :key #'car))
              (apply-m2class (car <>) (cdr <>))
