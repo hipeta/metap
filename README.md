@@ -38,6 +38,22 @@ Using metap, it can simply be written like
 
 Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using metap.
 
+## APIs
+
+### Symbols
+
+- \*metap-m1-m2-paris\*
+All pairs which registered in metap.
+
+### Macros
+
+- register-m1-m2-pair (m1class m2class)
+Register m1class and m2class pair which you want enable metaclass propagation.
+As a point to notice, the concrete metaclass of m1class becomes the subclass of m2class, whose name is like %M2CLASS-METAP. This class is created while interpreting this macro. This specification is needed for applying metaclass to m1class before processing other mop processes.
+
+- validate-superclass* (&body validations)
+Syntax sugar for c2mop:validate-superclass.
+
 ## Installation
 
 1. Download metap and move the directory to quicklisp local-project directory.
