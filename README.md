@@ -51,7 +51,7 @@ Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which
 ### Functions
 
 - register-m1-m2-pair (m1class m2class)
- * Register m1class and m2class pair which you want enable metaclass propagation.
+ * Register m1class and m2class pair which you want to enable metaclass propagation.
 
 ### Macros
 
