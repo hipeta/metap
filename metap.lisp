@@ -65,7 +65,6 @@
 (defmethod c2mop:ensure-class-using-class :around ((class null) name &rest keys)
   (symbol-macrolet ((metaclass (getf keys :metaclass))
                     (direct-superclasses (getf keys :direct-superclasses)))
-    (ignore-errors (print name) (print keys) (print ""))
     (flet ((apply-m2class (m1class m2class)
              (when (and metaclass
                         (not (member metaclass `(standard-class ,(class-name m2class)))))
