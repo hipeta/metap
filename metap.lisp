@@ -15,7 +15,7 @@
            :+ensure-class-origin+
            :enable-metap
            :disable-metap
-           :with-metap-ensured))
+           :with-metap))
 (in-package :metap)
 
 (defparameter *metap-m1-m2-pairs* nil)
@@ -115,7 +115,7 @@
   #-sbcl
   (setf (symbol-function 'c2mop:ensure-class) origin))
 
-(defmacro with-metap-ensured (&body body)
+(defmacro with-metap (&body body)
   (let ((origin (gensym)))
     `(let ((,origin #'c2mop:ensure-class))
        (unwind-protect
