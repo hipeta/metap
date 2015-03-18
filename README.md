@@ -1,7 +1,7 @@
 # Metap
 
 Metap provides metaclass propagation along class inheritance structure.
-Metap use closer-mop and modify *c2mop:ensure-class-using-class :around (class t) name &rest args* so it can conflict with some libraries modifing same method.
+Metap uses closer-mop and changes *c2mop:ensure-class name &rest args* in *metap:with-metap-ensured* macro.
 
 ## Motivation
 
@@ -30,10 +30,11 @@ Using metap, it can simply be written like
 (defclass some-mixin () ())
 (metap:register-m1-m2-pair 'some-mixin 'some-meta-class)
 
-(defclass some-class1 (some-mixin) ())
-(defclass some-class2 (some-class1) ())
-(defclass some-class3 (some-class2) ())
-(defclass some-class4 (some-class1) ())
+(metap:with-metap-ensured
+  (defclass some-class1 (some-mixin) ())
+  (defclass some-class2 (some-class1) ())
+  (defclass some-class3 (some-class2) ())
+  (defclass some-class4 (some-class1) ()))
 ```
 
 Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which is written by using metap.
