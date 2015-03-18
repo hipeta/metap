@@ -11,21 +11,8 @@
   (:import-from :alexandria :compose)
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair
-           :validate-superclass*
-           :+ensure-class-origin+
-           :enable-metap
-           :disable-metap
-           :with-metap))
+           :validate-superclass*))
 (in-package :metap)
-
-(defparameter *metap-m1-m2-pairs* nil)
-
-(defun register-m1-m2-pair (m1class m2class)
-  (-<> (cons (find-class m1class) (find-class m2class))
-    (progn (when (member <> *metap-m1-m2-pairs* :test 'equal)
-             (warn "~a and ~a pair is already registered." (car <>) (cdr <>)))
-           <>)
-    (push *metap-m1-m2-pairs*)))
 
 (defmacro validate-superclass* (&body validations)
   `(progn
@@ -56,70 +43,44 @@
       (mapc #'rec direct-superclasses)
       (nreverse reverse-precedense-list))))
 
-(defconstant +ensure-class-origin+ #'c2mop:ensure-class)
+(defparameter *metap-m1-m2-pairs* nil)
 
-(defun enable-metap ()
-  #+sbcl
-  (sb-ext:without-package-locks
-    (fmakunbound 'c2mop:ensure-class)
-    (defun c2mop:ensure-class (name &rest args)
-      (symbol-macrolet ((metaclass (getf args :metaclass))
-                        (direct-superclasses (getf args :direct-superclasses)))
-        (flet ((apply-m2class (m1class m2class)
-                 (when (and metaclass (not (eq metaclass 'standard-class)))
-                   (error "Can not specify :metaclass because this class ~a is a subclass of ~a."
-                          name m1class))
-                 (setf metaclass (class-name m2class)))
-               (find-class% (symbol-or-class)
-                 (if (symbolp symbol-or-class)
-                     (find-class symbol-or-class)
-                     symbol-or-class)))
-          (let ((precedense-list
-                 (compute-precedense-list (mapcar #'find-class% direct-superclasses))))
-            (loop for c in precedense-list do
-                 (let ((pair (car (member c *metap-m1-m2-pairs* :key #'car))))
-                   (when pair
-                     (apply-m2class (car pair) (cdr pair))
-                     (return))))
-            (apply #'c2mop:ensure-class-using-class
-                   (ignore-errors (find-class name)) name args))))))
-  #-sbcl
-  (progn
-    (fmakunbound 'c2mop:ensure-class)
-    (defun c2mop:ensure-class (name &rest args)
-      (symbol-macrolet ((metaclass (getf args :metaclass))
-                        (direct-superclasses (getf args :direct-superclasses)))
-        (flet ((apply-m2class (m1class m2class)
-                 (when (and metaclass (not (eq metaclass 'standard-class)))
-                   (error "Can not specify :metaclass because this class ~a is a subclass of ~a."
-                          name m1class))
-                 (setf metaclass (class-name m2class)))
-               (find-class% (symbol-or-class)
-                 (if (symbolp symbol-or-class)
-                     (find-class symbol-or-class)
-                     symbol-or-class)))
-          (let ((precedense-list
-                 (compute-precedense-list (mapcar #'find-class% direct-superclasses))))
-            (loop for c in precedense-list do
-                 (let ((pair (car (member c *metap-m1-m2-pairs* :key #'car))))
-                   (when pair
-                     (apply-m2class (car pair) (cdr pair))
-                     (return))))
-            (apply #'c2mop:ensure-class-using-class
-                   (ignore-errors (find-class name)) name args)))))))
+(defun register-m1-m2-pair% (m1class m2child)
+  (-<> (cons (find-class m1class) (find-class m2child))
+    (progn (when (member <> *metap-m1-m2-pairs* :test 'equal)
+             (warn "~a and ~a pair is already registered." (car <>) (cdr <>)))
+           <>)
+    (push *metap-m1-m2-pairs*)))
 
-(defun disable-metap (origin)
-  #+sbcl
-  (sb-ext:without-package-locks
-    (setf (symbol-function 'c2mop:ensure-class) origin))
-  #-sbcl
-  (setf (symbol-function 'c2mop:ensure-class) origin))
+(defmacro register-m1-m2-pair (m1class m2class)
+  (let ((m2child-symbol (intern (format nil "%~a-METAP" (symbol-name m2class)))))
+    `(progn
+       (defclass ,m2child-symbol (,m2class) ())
+       (defmethod c2mop:ensure-class-using-class :around ((class ,m2child-symbol) name
+                                                          &rest keys)
+           (setf (getf keys :metaclass) ',m2child-symbol)
+           (apply #'call-next-method class name keys))
+       (register-m1-m2-pair% ',m1class ',m2child-symbol))))
 
-(defmacro with-metap (&body body)
-  (let ((origin (gensym)))
-    `(let ((,origin #'c2mop:ensure-class))
-       (unwind-protect
-            (progn
-              (enable-metap)
-              (progn ,@body))
-         (disable-metap ,origin)))))
+(defmethod c2mop:ensure-class-using-class :around ((class null) name &rest keys)
+  (symbol-macrolet ((metaclass (getf keys :metaclass))
+                    (direct-superclasses (getf keys :direct-superclasses)))
+    (flet ((apply-m2class (m1class m2class)
+             (when (and metaclass
+                        (not (member metaclass `(standard-class ,(class-name m2class)))))
+               (error "Can not specify :metaclass because this class ~a is a subclass of ~a."
+                      name m1class))
+             (setf metaclass (class-name m2class)))
+           (find-class% (symbol-or-class)
+             (if (symbolp symbol-or-class)
+                 (find-class symbol-or-class)
+                 symbol-or-class)))
+      (let ((precedense-list
+             (compute-precedense-list (mapcar #'find-class% direct-superclasses))))
+        (loop for c in precedense-list do
+             (let ((pair (car (member c *metap-m1-m2-pairs* :key #'car))))
+               (when pair
+                 (apply-m2class (car pair) (cdr pair))
+                 (return))))
+        (apply #'call-next-method class name keys)))))
+
