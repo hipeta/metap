@@ -28,7 +28,7 @@ Using metap, it can simply be written like
 
 ```
 (defclass some-mixin () ())
-(metap:register-m1-m2-pair 'some-mixin 'some-meta-class)
+(metap:register-m1-m2-pair some-mixin some-meta-class)
 
 (defclass some-class1 (some-mixin) ())
 (defclass some-class2 (some-class1) ())
