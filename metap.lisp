@@ -53,6 +53,8 @@
       (mapc #'rec direct-superclasses)
       (nreverse reverse-precedense-list))))
 
+(defconstant +ensure-class-origin+ #'c2mop:ensure-class)
+
 (defun start-metap-ensure-class ()
   #+sbcl
   (sb-ext:without-package-locks
