@@ -12,7 +12,10 @@
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair
            :validate-superclass*
-           :with-metap-ensured))
+           :+ensure-class-origin+
+           :enable-metap
+           :disable-metap
+           :with-metap))
 (in-package :metap)
 
 (defparameter *metap-m1-m2-pairs* nil)
@@ -53,7 +56,9 @@
       (mapc #'rec direct-superclasses)
       (nreverse reverse-precedense-list))))
 
-(defun start-metap-ensure-class ()
+(defconstant +ensure-class-origin+ #'c2mop:ensure-class)
+
+(defun enable-metap ()
   #+sbcl
   (sb-ext:without-package-locks
     (fmakunbound 'c2mop:ensure-class)
@@ -103,18 +108,18 @@
             (apply #'c2mop:ensure-class-using-class
                    (ignore-errors (find-class name)) name args)))))))
 
-(defun stop-metap-ensure-class (origin)
+(defun disable-metap (origin)
   #+sbcl
   (sb-ext:without-package-locks
     (setf (symbol-function 'c2mop:ensure-class) origin))
   #-sbcl
   (setf (symbol-function 'c2mop:ensure-class) origin))
 
-(defmacro with-metap-ensured (&body body)
+(defmacro with-metap (&body body)
   (let ((origin (gensym)))
     `(let ((,origin #'c2mop:ensure-class))
        (unwind-protect
             (progn
-              (start-metap-ensure-class)
+              (enable-metap)
               (progn ,@body))
-         (stop-metap-ensure-class ,origin)))))
+         (disable-metap ,origin)))))
