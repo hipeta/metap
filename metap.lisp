@@ -12,6 +12,7 @@
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair
            :validate-superclass*
+           :+ensure-class-origin+
            :enable-metap
            :disable-metap
            :with-metap-ensured))
