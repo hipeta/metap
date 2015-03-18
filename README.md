@@ -1,7 +1,7 @@
 # Metap
 
 Metap provides metaclass propagation along class inheritance structure.
-Metap uses closer-mop and changes *c2mop:ensure-class name &rest args* in *metap:with-metap-ensured* macro.
+Metap uses closer-mop and changes *c2mop:ensure-class name &rest args* by *metap:enable-metap* in *metap:with-metap* macro.
 
 ## Motivation
 
