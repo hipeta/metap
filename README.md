@@ -30,7 +30,21 @@ Using metap, it can simply be written like
 (defclass some-mixin () ())
 (metap:register-m1-m2-pair 'some-mixin 'some-meta-class)
 
-(metap:with-metap-ensured
+(metap:enable-metap)
+
+(defclass some-class1 (some-mixin) ())
+(defclass some-class2 (some-class1) ())
+(defclass some-class3 (some-class2) ())
+(defclass some-class4 (some-class1) ())
+```
+
+or you want metap to be local, 
+
+```
+(defclass some-mixin () ())
+(metap:register-m1-m2-pair 'some-mixin 'some-meta-class)
+
+(metap:with-metap
   (defclass some-class1 (some-mixin) ())
   (defclass some-class2 (some-class1) ())
   (defclass some-class3 (some-class2) ())
