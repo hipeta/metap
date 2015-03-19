@@ -8,7 +8,6 @@
 (in-package :cl-user)
 (defpackage metap
   (:use :cl :arrow-macros)
-  (:import-from :alexandria :compose)
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair
            :validate-superclass*))

@@ -2,7 +2,7 @@
 
 Metap provides metaclass propagation along class inheritance structure.
 Metap uses closer-mop and changes
-- *c2mop:ensure-class-using-class class name &rest args*
+- *c2mop:ensure-class-using-class :around class name &rest args*
 
 so it could conflicts with other library modifing same method.
 
@@ -46,7 +46,7 @@ Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which
 ### Variables
 
 - \*metap-m1-m2-pairs\*
- * All pairs which registered in metap.
+ * All pairs registered in metap.
 
 ### Functions
 
