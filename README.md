@@ -60,8 +60,9 @@ Also see cl-singleton-mixin (https://github.com/hipeta/cl-singleton-mixin) which
 
 ## Installation
 
-1. Download metap and move the directory to quicklisp local-project directory.
-1. (ql:quickload :metap)
+```
+(ql:quickload :metap)
+```
 
 ## License
 
