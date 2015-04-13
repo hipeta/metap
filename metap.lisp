@@ -7,7 +7,7 @@
 
 (in-package :cl-user)
 (defpackage metap
-  (:use :cl :arrow-macros)
+  (:use :cl)
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair
            :validate-superclass*))
@@ -61,9 +61,9 @@
              (if (symbolp symbol-or-class)
                  (ignore-errors (find-class symbol-or-class))
                  symbol-or-class)))
-      (let ((precedense-list (->> (mapcar #'find-class% (getf keys :direct-superclasses))
-                               (remove-if #'null)
-                               compute-precedense-list)))
+      (let ((precedense-list
+             (compute-precedense-list
+              (remove-if #'null (mapcar #'find-class% (getf keys :direct-superclasses))))))
         (loop for c in precedense-list do
              (let ((pair (car (member c *metap-m1-m2-pairs* :key #'car))))
                (when pair
