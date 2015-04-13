@@ -10,7 +10,6 @@
   :license "MIT"
   :description "Metap provides metaclass propagation along class inheritance structure."
   :serial t
-  :depends-on (:closer-mop
-               :arrow-macros)
+  :depends-on (:closer-mop)
   :components ((:file "metap")))
 

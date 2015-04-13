@@ -7,7 +7,7 @@
 
 (in-package :cl-user)
 (defpackage metap
-  (:use :cl :arrow-macros)
+  (:use :cl)
   (:export :*metap-m1-m2-pairs*
            :register-m1-m2-pair
            :validate-superclass*))
@@ -25,8 +25,7 @@
         (reverse-precedense-list nil))
     (labels ((rec (class &optional first-p)
                (symbol-macrolet ((junction-count (gethash class junction-count-table)))
-                 (let ((supers (c2mop:class-direct-superclasses class))
-                       (subs (c2mop:class-direct-subclasses class)))
+                 (let ((supers (c2mop:class-direct-superclasses class)))
                    (if first-p
                        (cond ((null class) nil)
                              (junction-count (incf junction-count))
@@ -45,15 +44,13 @@
 (defparameter *metap-m1-m2-pairs* nil)
 
 (defun register-m1-m2-pair (m1class m2class)
-  (-<> (cons (find-class m1class) (find-class m2class))
-    (progn (when (member <> *metap-m1-m2-pairs* :test 'equal)
-             (warn "~a and ~a pair is already registered." (car <>) (cdr <>)))
-           <>)
-    (push *metap-m1-m2-pairs*)))
+  (let ((pair (cons (find-class m1class) (find-class m2class))))
+    (when (member pair *metap-m1-m2-pairs* :test 'equal)
+      (warn "~a and ~a pair is already registered." (car pair) (cdr pair)))
+    (push pair *metap-m1-m2-pairs*)))
 
 (defmethod c2mop:ensure-class-using-class :around (class name &rest keys)
-  (symbol-macrolet ((metaclass (getf keys :metaclass))
-                    (direct-superclasses (getf keys :direct-superclasses)))
+  (symbol-macrolet ((metaclass (getf keys :metaclass)))
     (flet ((apply-m2class (m1class m2class)
              (when (and metaclass
                         (not (member metaclass `(standard-class ,(class-name m2class)))))
@@ -64,9 +61,9 @@
              (if (symbolp symbol-or-class)
                  (ignore-errors (find-class symbol-or-class))
                  symbol-or-class)))
-      (let ((precedense-list (->> (mapcar #'find-class% direct-superclasses)
-                               (remove-if #'null)
-                               compute-precedense-list)))
+      (let ((precedense-list
+             (compute-precedense-list
+              (remove-if #'null (mapcar #'find-class% (getf keys :direct-superclasses))))))
         (loop for c in precedense-list do
              (let ((pair (car (member c *metap-m1-m2-pairs* :key #'car))))
                (when pair
